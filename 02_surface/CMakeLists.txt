@@ -8,8 +8,8 @@ set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
 
 add_subdirectory("${CMAKE_SOURCE_DIR}/glfw-3.2.1/")
 
-include_directories("${CMAKE_SOURCE_DIR}/glfw-3.2.1/include" "/home/vmusil/VulkanSDK/1.1.97.0/x86_64/include" "${CMAKE_SOURCE_DIR}/inc")
+include_directories("${CMAKE_SOURCE_DIR}/glfw-3.2.1/include" "${VULKAN_INCLUDE_DIR}" "${CMAKE_SOURCE_DIR}/inc")
 
 add_executable(example02 ./src/main.cpp ./src/Core.cpp ./src/EngineCore.cpp)
 
-target_link_libraries(example02 glfw)
+target_link_libraries(example02 glfw X11-xcb)

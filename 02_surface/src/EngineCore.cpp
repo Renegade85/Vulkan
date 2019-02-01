@@ -23,7 +23,7 @@ VkBool32 EngineCore::isRequiredExtensionAvailable(std::vector<const char *> & re
 {
     std::vector<VkExtensionProperties> availableExtensions;
     getInstanceExtensionProperties(nullptr, availableExtensions);
-    bool found = false;
+    VkBool32 found = VK_FALSE;
 
     /* loop through every available extension property and compare it with required extensions */
     for (const char * & extensionName : requiredExtensions)
@@ -33,7 +33,7 @@ VkBool32 EngineCore::isRequiredExtensionAvailable(std::vector<const char *> & re
             int comp_result = std::string(extensionName).compare(extension.extensionName);
             if (0 == comp_result)
             {
-                found = true;
+                found = VK_TRUE;
                 break;
             }
         }
@@ -43,7 +43,7 @@ VkBool32 EngineCore::isRequiredExtensionAvailable(std::vector<const char *> & re
             std::cout << "Extension not supported: " << extensionName << std::endl;
             return VK_FALSE;
         }
-        found = false;
+        found = VK_FALSE;
     }
 
     return VK_TRUE;

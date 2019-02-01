@@ -1,6 +1,7 @@
 #include "Core.h"
 #include <vector>
 #include <stdexcept>
+#include <X11/Xlib-xcb.h>
 
 void Core::initCore(void)
 {
@@ -104,10 +105,11 @@ VkInstance Core::initVulkan(std::vector<const char *> & requiredLayers, std::vec
     ici.enabledExtensionCount   = requiredExtensions.size();
     ici.ppEnabledExtensionNames = requiredExtensions.data();
 
-    m_vkCreateInstance(&ici, nullptr, &vulkanInstance);
+    VkResult result = m_vkCreateInstance(&ici, nullptr, &vulkanInstance);
 
     m_vkDestroyInstance = (PFN_vkDestroyInstance) m_vkGetInstanceProcAddress(vulkanInstance, "vkDestroyInstance");
-    m_vkPlatformCreateSurface = (PFN_vkPlatformCreateSurface) m_vkGetInstanceProcAddress(vulkanInstance, CORE_PLATFORM_CREATE_SURFACE_NAME);
+    const char * surface_function_name = CORE_PLATFORM_CREATE_SURFACE_NAME;
+    m_vkPlatformCreateSurface = (PFN_vkPlatformCreateSurface) m_vkGetInstanceProcAddress(vulkanInstance, "vkCreateXcbSurfaceKHR");
 
     return vulkanInstance;
 }
@@ -138,6 +140,8 @@ void Core::getInstanceLayerProperties(std::vector<VkLayerProperties> & pProperti
 VkSurfaceKHR Core::createSurface(VkInstance instance, GLFWwindow * handle)
 {
     VkSurfaceKHR surface = 0u;
+    VkResult result = glfwCreateWindowSurface(instance, handle, nullptr, &surface);
+
     #if defined VK_USE_PLATFORM_WIN32_KHR
     VkWin32SurfaceCreateInfoKHR surfaceInfo;
     surfaceInfo.sType = VK_STRUCTURE_TYPE_WIN32_SURFACE_CREATE_INFO_KHR;
@@ -153,7 +157,7 @@ VkSurfaceKHR Core::createSurface(VkInstance instance, GLFWwindow * handle)
     surfaceInfo.display = glfwGetWaylandDisplay();
     surfaceInfo.surface = glfwGetWaylandWindow(handle);
     #elif defined VK_USE_PLATFORM_XCB_KHR
-    VkXcbSurfaceCreateInfoKHR = surfaceInfo;
+    VkXcbSurfaceCreateInfoKHR surfaceInfo;
     surfaceInfo.sType = VK_STRUCTURE_TYPE_XCB_SURFACE_CREATE_INFO_KHR;
     surfaceInfo.pNext = nullptr;
     surfaceInfo.flags = 0;

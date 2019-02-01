@@ -4,12 +4,12 @@
 //#define VK_USE_PLATFORM_WIN32_KHR
 //#define VK_USE_PLATFORM_WAYLAND_KHR
 //#define VK_USE_PLATFORM_XLIB_KHR
-//#define VK_USE_PLATFORM_XCB_KHR
+#define VK_USE_PLATFORM_XCB_KHR
 //#define VK_USE_PLATFORM_MACOS_MVK
 
 #if defined VK_USE_PLATFORM_WIN32_KHR
 #define GLFW_EXPOSE_NATIVE_WIN32 
-#elif defined VK_USE_PLATFORM_XLIB_KHR
+#elif defined VK_USE_PLATFORM_XLIB_KHR || defined VK_USE_PLATFORM_XCB_KHR
 #define GLFW_EXPOSE_NATIVE_X11
 #elif defined VK_USE_PLATFORM_WAYLAND_KHR
 #define GLFW_EXPOSE_NATIVE_WAYLAND
@@ -37,7 +37,7 @@
 #define XPlatformCloseLib                       dlclose
 #define XPlatformLibHandle                      void *
 #define XPlatformLoadProc                       dlsym
-#define VULKAN_LIBRARY_NAME                     "libvulkan.so"
+#define VULKAN_LIBRARY_NAME                     "libvulkan.so.1"
 #if defined VK_USE_PLATFORM_WAYLAND_KHR
 #define CORE_PLATFORM_SURFACE_EXTENSION_NAME    VK_KHR_WAYLAND_SURFACE_EXTENSION_NAME
 #define PFN_vkPlatformCreateSurface             PFN_vkCreateWaylandSurfaceKHR
