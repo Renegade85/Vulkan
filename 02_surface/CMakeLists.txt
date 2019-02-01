@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.12)
+cmake_minimum_required(VERSION 3.1)
 project(vulkan_surface)
 
 set(CMAKE_BUILD_TYPE Debug)
@@ -8,7 +8,7 @@ set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
 
 add_subdirectory("${CMAKE_SOURCE_DIR}/glfw-3.2.1/")
 
-include_directories("${CMAKE_SOURCE_DIR}/glfw-3.2.1/include" "c:/VulkanSDK/1.1.85.0/Include" "${CMAKE_SOURCE_DIR}/inc")
+include_directories("${CMAKE_SOURCE_DIR}/glfw-3.2.1/include" "/home/vmusil/VulkanSDK/1.1.97.0/x86_64/include" "${CMAKE_SOURCE_DIR}/inc")
 
 add_executable(example02 ./src/main.cpp ./src/Core.cpp ./src/EngineCore.cpp)
 

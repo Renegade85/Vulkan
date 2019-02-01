@@ -3,7 +3,7 @@
 
 //#define VK_USE_PLATFORM_WIN32_KHR
 //#define VK_USE_PLATFORM_WAYLAND_KHR
-#define VK_USE_PLATFORM_XLIB_KHR
+//#define VK_USE_PLATFORM_XLIB_KHR
 //#define VK_USE_PLATFORM_XCB_KHR
 //#define VK_USE_PLATFORM_MACOS_MVK
 
@@ -18,7 +18,6 @@
 #define VK_NO_PROTOTYPES
 #include "vulkan/vulkan.h"
 #define GLFW_INCLUDE_NONE
-#define GLFW_EXPOSE_NATIVE_WIN32
 #include "GLFW/glfw3.h"
 #include "GLFW/glfw3native.h"
 #include <vector>
@@ -32,8 +31,9 @@
 #define CORE_PLATFORM_SURFACE_EXTENSION_NAME    VK_KHR_WIN32_SURFACE_EXTENSION_NAME
 #define PFN_vkPlatformCreateSurface             PFN_vkCreateWin32SurfaceKHR
 #define CORE_PLATFORM_CREATE_SURFACE_NAME       "vkCreateWin32SurfaceKHR"
-#elif defined VK_USE_PLATFORM_WAYLAND_KHR || VK_USE_PLATFORM_XCB_KHR || VK_USE_PLATFORM_XLIB_KHR
-#define XPlatformLoadLibrary                    dlopen
+#elif defined VK_USE_PLATFORM_WAYLAND_KHR || defined VK_USE_PLATFORM_XCB_KHR || defined VK_USE_PLATFORM_XLIB_KHR
+#include <dlfcn.h>
+#define XPlatformLoadLibrary(path)              dlopen((path), RTLD_LAZY | RTLD_LOCAL)
 #define XPlatformCloseLib                       dlclose
 #define XPlatformLibHandle                      void *
 #define XPlatformLoadProc                       dlsym

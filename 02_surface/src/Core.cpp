@@ -93,7 +93,7 @@ VkInstance Core::initVulkan(std::vector<const char *> & requiredLayers, std::vec
     ai.engineVersion = 0u;
     ai.apiVersion = getVulkanApiVersion();
 
-    const char * extensions[] = {VK_KHR_SURFACE_EXTENSION_NAME, VK_KHR_WIN32_SURFACE_EXTENSION_NAME};
+    const char * extensions[] = {VK_KHR_SURFACE_EXTENSION_NAME, CORE_PLATFORM_SURFACE_EXTENSION_NAME};
     VkInstanceCreateInfo ici;
     ici.sType                   = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
     ici.pNext                   = nullptr;
@@ -151,21 +151,21 @@ VkSurfaceKHR Core::createSurface(VkInstance instance, GLFWwindow * handle)
     surfaceInfo.pNext = nullptr;
     surfaceInfo.flags = 0;
     surfaceInfo.display = glfwGetWaylandDisplay();
-    surfaceInfo.surface = glfwGetWaylandWindow(m_window);
+    surfaceInfo.surface = glfwGetWaylandWindow(handle);
     #elif defined VK_USE_PLATFORM_XCB_KHR
     VkXcbSurfaceCreateInfoKHR = surfaceInfo;
     surfaceInfo.sType = VK_STRUCTURE_TYPE_XCB_SURFACE_CREATE_INFO_KHR;
     surfaceInfo.pNext = nullptr;
     surfaceInfo.flags = 0;
     surfaceInfo.connection = XGetXCBConnection(glfwGetX11Display());
-    surfaceInfo.window = glfwGetX11Window(m_window);
+    surfaceInfo.window = glfwGetX11Window(handle);
     #elif defined VK_USE_PLATFORM_XLIB_KHR
     VkXlibSurfaceCreateInfoKHR surfaceInfo;
     surfaceInfo.sType = VK_STRUCTURE_TYPE_XLIB_SURFACE_CREATE_INFO_KHR;
     surfaceInfo.pNext = nullptr;
     surfaceInfo.flags = 0;
-    surfaceInfo.display = glfwGetX11Display();
-    surfaceInfo.window = glfwGetX11Window();
+    surfaceInfo.dpy = glfwGetX11Display();
+    surfaceInfo.window = glfwGetX11Window(handle);
     #elif defined VK_USE_PLATFORM_MACOS_MVK
     #endif
 
